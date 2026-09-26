@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createRootRoute, createRoute, createRouter, Link, Outlet, useNavigate } from '@tanstack/react-router';
-import { Coffee, Users, UserCheck, Sparkles, ArrowRight, Plus, X, MapPin } from 'lucide-react';
+import { createRootRoute, createRoute, Link, Outlet, useNavigate } from '@tanstack/react-router';
+import { Coffee, Users, UserCheck, Sparkles, ArrowRight, Plus, X, MapPin, Feather, Compass, Film, Music, Palette, BookOpen } from 'lucide-react';
 import { CAFE_MENU, MenuItem } from './data/menu';
 import { explainDish, generateIcebreaker } from './lib/gemini';
 import { getCart, saveCart, CartItem, getAttendees, getStoredProfile, saveProfile, UserProfile, IntentType } from './lib/store';
@@ -9,7 +9,7 @@ import { getCart, saveCart, CartItem, getAttendees, getStoredProfile, saveProfil
 export const rootRoute = createRootRoute({
   component: function Root() {
     const [cartCount, setCartCount] = useState(0);
-    const [attendeeCount, setAttendeeCount] = useState(5);
+    const [attendeeCount, setAttendeeCount] = useState(6);
 
     useEffect(() => {
       const update = () => {
@@ -27,8 +27,8 @@ export const rootRoute = createRootRoute({
         <header className="app-header">
           <div className="header-row">
             <Link to="/" className="brand-badge">
-              <span>☕ BrewLens</span>
-              <span className="google-pill">Google Pop-Up</span>
+              <span style={{ fontSize: '1.25rem' }}>☕ Third Wave Cafe</span>
+              <span className="google-pill">Bengaluru Lounge</span>
             </Link>
             <nav className="nav-tabs">
               <Link to="/menu" className="nav-btn" activeProps={{ className: 'nav-btn active' }}>
@@ -76,13 +76,13 @@ export const indexRoute = createRoute({
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase' }}>
             <Sparkles size={16} />
-            <span>Google Cloud Builder Pop-Up · Bengaluru</span>
+            <span>Third Wave Coffee · Bengaluru Cafe & Creative Lounge</span>
           </div>
           <h1 style={{ fontSize: '1.7rem', fontWeight: 800, lineHeight: 1.2 }}>
-            Never wonder what you're ordering again.
+            See what you're ordering. Connect with who's in the room.
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '600px' }}>
-            Explore visual dish breakdowns powered by <strong>Gemini 3.8 Flash</strong>, see ingredients & flavor profiles, and connect in real-time with builders in the room.
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '650px' }}>
+            Explore visual dish & brew breakdowns with <strong>Gemini 3.8 Flash</strong>, and check in to connect with writers, filmmakers, designers, founders, and artists working around you.
           </p>
         </div>
 
@@ -103,7 +103,7 @@ export const indexRoute = createRoute({
               </div>
               <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '4px' }}>Visual Smart Menu</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>
-                Browse all {CAFE_MENU.length} cafe items with flavor radar, ingredient breakdowns, and Gemini Sommelier explainers.
+                Understand all {CAFE_MENU.length} Third Wave Coffee specialties with flavor meters, ingredients, and AI sommelier tasting notes.
               </p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#38bdf8', fontWeight: 700, fontSize: '0.85rem' }}>
@@ -126,9 +126,9 @@ export const indexRoute = createRoute({
               <div style={{ width: '38px', height: '38px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', marginBottom: '10px' }}>
                 <Users size={20} />
               </div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '4px' }}>Builder Lounge</h3>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '4px' }}>Cafe Creative Lounge</h3>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>
-                {attendees.length} builders currently checked in. See who's open to chat and get 1-click AI icebreakers.
+                {attendees.length} creatives, writers & builders in the room. See who's open to chat and get 1-click icebreaker openers.
               </p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontWeight: 700, fontSize: '0.85rem' }}>
@@ -151,8 +151,8 @@ export const indexRoute = createRoute({
           fontSize: '0.78rem',
           color: 'var(--text-muted)'
         }}>
-          <span>🚀 Powered by: <strong>Gemini 3.8 Flash</strong> + <strong>Nano Banana Pro</strong></span>
-          <span>⚡ Built with: <strong>TanStack Router</strong> + <strong>Park UI</strong></span>
+          <span>✨ Powered by <strong>Gemini 3.8 Flash</strong> + <strong>Nano Banana Pro</strong></span>
+          <span>📍 Third Wave Coffee · Bengaluru</span>
         </div>
       </div>
     );
@@ -209,8 +209,8 @@ export const menuRoute = createRoute({
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800 }}>Visual Smart Menu</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Understand every brew & bite before you order</p>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800 }}>Third Wave Coffee Menu</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Visual guides, taste profiles & sommelier notes</p>
           </div>
           <button className="btn-outline" onClick={() => setVegOnly(!vegOnly)} style={{ borderColor: vegOnly ? '#10b981' : 'var(--border)' }}>
             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: vegOnly ? '#10b981' : '#64748b' }}></span>
@@ -233,6 +233,11 @@ export const menuRoute = createRoute({
         <div className="menu-grid">
           {filteredItems.map(item => (
             <div key={item.id} className="menu-card" onClick={() => handleExplain(item)}>
+              {item.imageUrl && (
+                <div style={{ width: '100%', height: '150px', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px', background: '#1c2638' }}>
+                  <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              )}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                   <span className={`diet-tag ${item.isVeg ? 'diet-veg' : 'diet-nonveg'}`}>
@@ -257,7 +262,7 @@ export const menuRoute = createRoute({
                   onClick={(e) => { e.stopPropagation(); handleExplain(item); }}
                 >
                   <Sparkles size={13} color="#38bdf8" />
-                  <span>Explain Dish</span>
+                  <span>Explain Taste</span>
                 </button>
                 <button
                   className="btn-solid"
@@ -284,6 +289,12 @@ export const menuRoute = createRoute({
                 </button>
               </div>
 
+              {activeItem.imageUrl && (
+                <div style={{ width: '100%', height: '200px', borderRadius: '10px', overflow: 'hidden', background: '#1c2638' }}>
+                  <img src={activeItem.imageUrl} alt={activeItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              )}
+
               <div>
                 <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{activeItem.name}</h2>
                 <p style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '1.05rem' }}>₹{activeItem.price}</p>
@@ -302,16 +313,17 @@ export const menuRoute = createRoute({
                   <span>Gemini Sommelier Explainer</span>
                 </div>
                 {explaining ? (
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Analyzing flavor notes...</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Brewing tasting notes...</div>
                 ) : (
                   <p style={{ fontSize: '0.85rem', lineHeight: 1.5, whiteSpace: 'pre-line' }}>{aiExplanation}</p>
                 )}
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '6px', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                <strong>🖼️ Nano Banana Pro Visual Prompt:</strong>
-                <div style={{ fontStyle: 'italic', marginTop: '2px' }}>"{activeItem.imagePrompt}"</div>
-              </div>
+              {activeItem.funFact && (
+                <div style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)', padding: '10px 12px', borderRadius: '8px', fontSize: '0.78rem', color: '#f59e0b' }}>
+                  💡 <strong>Origin / Fun Fact:</strong> {activeItem.funFact}
+                </div>
+              )}
 
               <button className="btn-solid" style={{ width: '100%' }} onClick={() => { addToCart(activeItem); setActiveItem(null); }}>
                 Add to Order (₹{activeItem.price})
@@ -332,9 +344,9 @@ export const checkinRoute = createRoute({
     const existing = getStoredProfile();
     const [name, setName] = useState(existing?.name || '');
     const [role, setRole] = useState(existing?.role || '');
-    const [company, setCompany] = useState(existing?.company || '');
+    const [field, setField] = useState(existing?.field || 'Cinema & Writing');
     const [project, setProject] = useState(existing?.project || '');
-    const [skills, setSkills] = useState(existing?.skills?.join(', ') || 'React, TypeScript, Gemini');
+    const [tags, setTags] = useState(existing?.tags?.join(', ') || 'Screenwriting, Storytelling, Creative');
     const [intent, setIntent] = useState<IntentType>(existing?.intent || 'chat');
     const [tableNo, setTableNo] = useState(existing?.tableNo || 'Table 4');
     const [submitted, setSubmitted] = useState(false);
@@ -344,13 +356,13 @@ export const checkinRoute = createRoute({
       e.preventDefault();
       const profile: UserProfile = {
         id: existing?.id || String(Date.now()),
-        name: name || 'Anonymous Builder',
-        role: role || 'Builder',
-        company: company || 'Self / Startup',
-        project: project || 'Building at Google Pop-Up',
-        skills: skills.split(',').map(s => s.trim()).filter(Boolean),
+        name: name || 'Anonymous Creative',
+        role: role || 'Writer / Creator',
+        field: field || 'Arts & Creative',
+        project: project || 'Writing & creating at Third Wave Coffee',
+        tags: tags.split(',').map(s => s.trim()).filter(Boolean),
         intent,
-        tableNo: tableNo || 'Main Area',
+        tableNo: tableNo || 'Main Seating',
         checkedInAt: 'Just now',
         avatarColor: '#10b981'
       };
@@ -369,7 +381,7 @@ export const checkinRoute = createRoute({
             <h2 style={{ fontSize: '1.35rem', fontWeight: 800 }}>Cafe Presence Check-In</h2>
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '18px' }}>
-            Let other builders in the room know what you're working on and if you're open to chat.
+            Open to all writers, filmmakers, artists, architects, designers, founders & creators. Let people around you know what you're working on.
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -388,12 +400,12 @@ export const checkinRoute = createRoute({
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>ROLE</label>
+                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>ROLE / CRAFT</label>
                 <input
                   type="text"
                   className="search-input"
                   style={{ marginTop: '3px' }}
-                  placeholder="e.g. Engineer / PM"
+                  placeholder="e.g. Screenwriter / Director"
                   value={role}
                   onChange={e => setRole(e.target.value)}
                 />
@@ -404,7 +416,7 @@ export const checkinRoute = createRoute({
                   type="text"
                   className="search-input"
                   style={{ marginTop: '3px' }}
-                  placeholder="e.g. Table 4"
+                  placeholder="e.g. Table 4 / Patio"
                   value={tableNo}
                   onChange={e => setTableNo(e.target.value)}
                 />
@@ -412,33 +424,45 @@ export const checkinRoute = createRoute({
             </div>
 
             <div>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>WHAT ARE YOU BUILDING TODAY?</label>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>FIELD / DISCIPLINE</label>
+              <input
+                type="text"
+                className="search-input"
+                style={{ marginTop: '3px' }}
+                placeholder="e.g. Film, Fiction Writing, Architecture, Design, Music"
+                value={field}
+                onChange={e => setField(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>WHAT ARE YOU WORKING ON TODAY?</label>
               <input
                 type="text"
                 required
                 className="search-input"
                 style={{ marginTop: '3px' }}
-                placeholder="e.g. Real-time Agent with Gemini 3.8 Flash"
+                placeholder="e.g. Drafting a mystery screenplay / Composing ambient score"
                 value={project}
                 onChange={e => setProject(e.target.value)}
               />
             </div>
 
             <div>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>SKILLS / TECH STACK</label>
+              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>TAGS / INTERESTS (comma separated)</label>
               <input
                 type="text"
                 className="search-input"
                 style={{ marginTop: '3px' }}
-                placeholder="React, Python, GCP, Vertex AI"
-                value={skills}
-                onChange={e => setSkills(e.target.value)}
+                placeholder="Screenwriting, Documentary, Audio, Fiction"
+                value={tags}
+                onChange={e => setTags(e.target.value)}
               />
             </div>
 
             <div>
               <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '4px', display: 'block' }}>
-                NETWORKING INTENT
+                SOCIAL / WORK INTENT
               </label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
                 <button
@@ -495,14 +519,15 @@ export const loungeRoute = createRoute({
       const matchesSearch = !searchQuery ||
         a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         a.project.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        a.skills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+        (a.field && a.field.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        a.tags.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchesIntent && matchesSearch;
     });
 
     const handleGetIcebreaker = async (target: UserProfile) => {
       setGenerating(true);
-      setIcebreakerModal({ target, text: 'Generating conversation starter with Gemini 3.8 Flash...' });
-      const userA = myProfile || { name: 'Fellow Builder', project: 'Google Builder Pop-Up', skills: ['Tech'] };
+      setIcebreakerModal({ target, text: 'Thinking of a personalized creative conversation starter with Gemini...' });
+      const userA = myProfile || { name: 'Fellow Creative', project: 'Third Wave Coffee session', field: 'Creative Work' };
       const prompt = await generateIcebreaker(userA, target);
       setIcebreakerModal({ target, text: prompt });
       setGenerating(false);
@@ -512,8 +537,8 @@ export const loungeRoute = createRoute({
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <div>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800 }}>Builder Lounge</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>{attendees.length} builders currently checked into the cafe</p>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800 }}>Cafe Creative Lounge</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>{attendees.length} writers, filmmakers, artists & creators in the room</p>
           </div>
           <Link to="/checkin" className="btn-solid" style={{ fontSize: '0.8rem' }}>
             + Update Status
@@ -537,8 +562,8 @@ export const loungeRoute = createRoute({
           <input
             type="text"
             className="search-input"
-            style={{ maxWidth: '200px', marginLeft: 'auto', padding: '6px 10px', fontSize: '0.8rem' }}
-            placeholder="Search skill / project..."
+            style={{ maxWidth: '220px', marginLeft: 'auto', padding: '6px 10px', fontSize: '0.8rem' }}
+            placeholder="Search craft, writing, field..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
           />
@@ -555,7 +580,7 @@ export const loungeRoute = createRoute({
                     </div>
                     <div>
                       <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>{person.name}</h3>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{person.role} · {person.company}</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{person.role} · <span style={{ color: '#38bdf8' }}>{person.field}</span></p>
                     </div>
                   </div>
                   <span className={`intent-badge intent-${person.intent}`}>
@@ -564,12 +589,12 @@ export const loungeRoute = createRoute({
                 </div>
 
                 <div style={{ background: 'var(--surface-card)', padding: '8px 10px', borderRadius: '6px', margin: '10px 0 8px 0' }}>
-                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Building Today</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>Working On Today</div>
                   <p style={{ fontSize: '0.82rem', marginTop: '2px', fontWeight: 500 }}>{person.project}</p>
                 </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '6px' }}>
-                  {person.skills.map((s, idx) => (
+                  {person.tags.map((s, idx) => (
                     <span key={idx} className="skill-tag">{s}</span>
                   ))}
                 </div>
@@ -622,7 +647,7 @@ export const loungeRoute = createRoute({
               </div>
 
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                📍 Located at: <strong>{icebreakerModal.target.tableNo}</strong> · Building: {icebreakerModal.target.project}
+                📍 Seated at: <strong>{icebreakerModal.target.tableNo}</strong> · Craft: {icebreakerModal.target.field}
               </div>
 
               <button className="btn-solid" onClick={() => setIcebreakerModal(null)}>

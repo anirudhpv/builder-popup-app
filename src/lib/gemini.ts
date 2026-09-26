@@ -2,7 +2,7 @@ import { GoogleGenAI } from '@google/genai';
 import { MenuItem } from '../data/menu';
 import { UserProfile } from './store';
 
-const apiKey = *** || '';
+const apiKey = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_GEMINI_API_KEY) || '';
 const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 export async function explainDish(item: MenuItem, userQuestion?: string): Promise<string> {
@@ -53,7 +53,7 @@ export async function generateIcebreaker(userA: UserProfile | any, userB: UserPr
 Person A: ${userA.name} (${userA.role || 'Visitor'}, Field: ${userA.field || 'Creative'}, Working on: ${userA.project || 'their work'})
 Person B: ${userB.name} (${userB.role}, Field: ${userB.field}, Working on: "${userB.project}", Interests: ${userB.tags?.join(', ')}, Intent: ${userB.intent})
 
-Give ONLY the 1-2 sentence natural spoken opener. Connect their creative/professional interests naturally (e.g. asking about their writing, art, film, design, or project). Keep it casual and warm.`,
+Give ONLY the 1-2 sentence natural spoken opener. Connect their creative/professional interests naturally. Keep it casual and warm.`,
     });
     return response.text || `Hey ${userB.name}, couldn't help but notice you're working on ${userB.project} — sounds fascinating!`;
   } catch (err) {

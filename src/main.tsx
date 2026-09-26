@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { RouterProvider, createRouter, createHashHistory } from '@tanstack/react-router';
 import { rootRoute, indexRoute, menuRoute, checkinRoute, loungeRoute } from './routes';
 import './index.css';
+
+const hashHistory = createHashHistory();
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -13,7 +15,7 @@ const routeTree = rootRoute.addChildren([
 
 const router = createRouter({
   routeTree,
-  basepath: '/builder-popup-app',
+  history: hashHistory,
 });
 
 declare module '@tanstack/react-router' {

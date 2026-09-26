@@ -31,7 +31,7 @@ export const DIVERSE_CAFE_ATTENDEES: UserProfile[] = [
     name: 'Anirudh P',
     role: 'Creative Strategist & Consultant',
     field: 'Design & Media',
-    project: 'Writing an interactive visual food & presence app for Bangalore cafes',
+    project: 'Building an interactive visual food & presence app for Bangalore cafes',
     tags: ['Brand Strategy', 'Visual Design', 'Storytelling'],
     intent: 'chat',
     tableNo: 'Table 4',
@@ -109,7 +109,21 @@ export const DIVERSE_CAFE_ATTENDEES: UserProfile[] = [
 export function getStoredProfile(): UserProfile | null {
   try {
     const data = localStorage.getItem(STORAGE_PROFILE_KEY);
-    return data ? JSON.parse(data) : null;
+    if (!data) return null;
+    const p = JSON.parse(data);
+    return {
+      id: p.id || String(Date.now()),
+      name: p.name || 'Anonymous Creative',
+      role: p.role || 'Creator',
+      field: p.field || 'Arts & Creative',
+      project: p.project || 'Working at the cafe',
+      tags: Array.isArray(p.tags) ? p.tags : Array.isArray(p.skills) ? p.skills : ['Creative'],
+      intent: p.intent || 'chat',
+      tableNo: p.tableNo || 'Main Seating',
+      checkedInAt: p.checkedInAt || 'Just now',
+      currentOrder: p.currentOrder || undefined,
+      avatarColor: p.avatarColor || '#10b981'
+    };
   } catch {
     return null;
   }
@@ -130,7 +144,22 @@ export function saveProfile(profile: UserProfile): void {
 export function getAttendees(): UserProfile[] {
   try {
     const data = localStorage.getItem(STORAGE_LOUNGE_KEY);
-    return data ? JSON.parse(data) : DIVERSE_CAFE_ATTENDEES;
+    if (!data) return DIVERSE_CAFE_ATTENDEES;
+    const parsed = JSON.parse(data);
+    if (!Array.isArray(parsed)) return DIVERSE_CAFE_ATTENDEES;
+    return parsed.map((p: any) => ({
+      id: String(p.id || Math.random()),
+      name: String(p.name || 'Anonymous Creative'),
+      role: String(p.role || 'Creator'),
+      field: String(p.field || 'Creative Work'),
+      project: String(p.project || 'Working at Third Wave Coffee'),
+      tags: Array.isArray(p.tags) ? p.tags : Array.isArray(p.skills) ? p.skills : ['Creative'],
+      intent: (['chat', 'cowork', 'focus'].includes(p.intent) ? p.intent : 'chat') as IntentType,
+      tableNo: String(p.tableNo || 'Main Seating'),
+      checkedInAt: String(p.checkedInAt || 'Recently'),
+      currentOrder: p.currentOrder ? String(p.currentOrder) : undefined,
+      avatarColor: String(p.avatarColor || '#10b981')
+    }));
   } catch {
     return DIVERSE_CAFE_ATTENDEES;
   }

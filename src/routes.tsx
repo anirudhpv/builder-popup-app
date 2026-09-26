@@ -523,18 +523,19 @@ export const loungeRoute = createRoute({
 
     const filtered = attendees.filter(a => {
       const matchesIntent = filterIntent === 'all' || a.intent === filterIntent;
-      const matchesSearch = !searchQuery ||
-        a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        a.project.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (a.field && a.field.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        a.tags.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+      const q = searchQuery.toLowerCase().trim();
+      const matchesSearch = !q ||
+        (a.name && a.name.toLowerCase().includes(q)) ||
+        (a.project && a.project.toLowerCase().includes(q)) ||
+        (a.field && a.field.toLowerCase().includes(q)) ||
+        (Array.isArray(a.tags) && a.tags.some(s => s && s.toLowerCase().includes(q)));
       return matchesIntent && matchesSearch;
     });
 
     const handleGetIcebreaker = async (target: UserProfile) => {
       setGenerating(true);
       setIcebreakerModal({ target, text: 'Thinking of a personalized creative conversation starter with Gemini...' });
-      const userA = myProfile || { name: 'Fellow Creative', project: 'Third Wave Coffee session', field: 'Creative Work' };
+      const userA = myProfile || { name: 'Fellow Creative', project: 'Third Wave Coffee session', field: 'Creative Work', tags: [] };
       const prompt = await generateIcebreaker(userA, target);
       setIcebreakerModal({ target, text: prompt });
       setGenerating(false);
@@ -577,61 +578,66 @@ export const loungeRoute = createRoute({
         </div>
 
         <div className="lounge-grid">
-          {filtered.map(person => (
-            <div key={person.id} className="lounge-card">
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div className="avatar-editorial">
-                      {person.name[0]}
+          {filtered.map(person => {
+            const initial = (person.name && person.name.trim() ? person.name.trim()[0] : 'C').toUpperCase();
+            const tags = Array.isArray(person.tags) ? person.tags : [];
+            
+            return (
+              <div key={person.id} className="lounge-card">
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div className="avatar-editorial">
+                        {initial}
+                      </div>
+                      <div>
+                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--ink-primary)' }}>{person.name || 'Anonymous Creator'}</h3>
+                        <p style={{ color: 'var(--ink-secondary)', fontSize: '0.78rem', fontWeight: 600 }}>{person.role || 'Creator'} · <span style={{ color: 'var(--brand-forest)' }}>{person.field || 'Creative'}</span></p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.05rem', fontWeight: 700, color: 'var(--ink-primary)' }}>{person.name}</h3>
-                      <p style={{ color: 'var(--ink-secondary)', fontSize: '0.78rem', fontWeight: 600 }}>{person.role} · <span style={{ color: 'var(--brand-forest)' }}>{person.field}</span></p>
-                    </div>
-                  </div>
-                  <span className={`intent-badge intent-${person.intent}`}>
-                    {person.intent === 'chat' ? '🟢 Chat' : person.intent === 'cowork' ? '🟡 Cowork' : '🔴 Focus'}
-                  </span>
-                </div>
-
-                <div style={{ background: 'var(--bg-subtle)', padding: '10px 12px', borderRadius: '6px', margin: '12px 0 10px 0', border: '1px solid var(--border-subtle)' }}>
-                  <div style={{ fontSize: '0.68rem', color: 'var(--ink-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Working On Today</div>
-                  <p style={{ fontSize: '0.84rem', marginTop: '2px', fontWeight: 500, color: 'var(--ink-primary)', lineHeight: 1.4 }}>{person.project}</p>
-                </div>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
-                  {person.tags.map((s, idx) => (
-                    <span key={idx} className="craft-tag">{s}</span>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.76rem', color: 'var(--ink-muted)', marginBottom: '10px', borderTop: '1px solid var(--border-subtle)', paddingTop: '8px' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <MapPin size={12} color="var(--brand-green)" />
-                    {person.tableNo}
-                  </span>
-                  {person.currentOrder && (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--brand-amber)', fontWeight: 600 }}>
-                      <Coffee size={12} />
-                      {person.currentOrder}
+                    <span className={`intent-badge intent-${person.intent || 'chat'}`}>
+                      {person.intent === 'chat' ? '🟢 Chat' : person.intent === 'cowork' ? '🟡 Cowork' : '🔴 Focus'}
                     </span>
-                  )}
+                  </div>
+
+                  <div style={{ background: 'var(--bg-subtle)', padding: '10px 12px', borderRadius: '6px', margin: '12px 0 10px 0', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--ink-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Working On Today</div>
+                    <p style={{ fontSize: '0.84rem', marginTop: '2px', fontWeight: 500, color: 'var(--ink-primary)', lineHeight: 1.4 }}>{person.project || 'Creative session'}</p>
+                  </div>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
+                    {tags.map((s, idx) => (
+                      <span key={idx} className="craft-tag">{s}</span>
+                    ))}
+                  </div>
                 </div>
 
-                <button
-                  className="btn-secondary"
-                  style={{ width: '100%', fontSize: '0.78rem', padding: '7px 12px' }}
-                  onClick={() => handleGetIcebreaker(person)}
-                >
-                  <Sparkles size={13} color="var(--brand-forest)" />
-                  <span>AI Icebreaker Opener</span>
-                </button>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.76rem', color: 'var(--ink-muted)', marginBottom: '10px', borderTop: '1px solid var(--border-subtle)', paddingTop: '8px' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <MapPin size={12} color="var(--brand-green)" />
+                      {person.tableNo || 'Main Area'}
+                    </span>
+                    {person.currentOrder && (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--brand-amber)', fontWeight: 600 }}>
+                        <Coffee size={12} />
+                        {person.currentOrder}
+                      </span>
+                    )}
+                  </div>
+
+                  <button
+                    className="btn-secondary"
+                    style={{ width: '100%', fontSize: '0.78rem', padding: '7px 12px' }}
+                    onClick={() => handleGetIcebreaker(person)}
+                  >
+                    <Sparkles size={13} color="var(--brand-forest)" />
+                    <span>AI Icebreaker Opener</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {icebreakerModal && (

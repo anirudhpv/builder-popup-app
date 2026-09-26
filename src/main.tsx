@@ -11,7 +11,10 @@ const routeTree = rootRoute.addChildren([
   loungeRoute,
 ]);
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  basepath: '/builder-popup-app',
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
